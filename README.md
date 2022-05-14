@@ -1,4 +1,4 @@
-# WBITT Network-Multitool (Formerly `praqma/Network-MultiTool`)
+# Docker Network-Multitool (Formerly `praqma/Network-MultiTool`)
 
 A (**multi-arch**) multitool for container/network testing and troubleshooting. The main docker image is based on Alpine Linux. There is a Fedora variant to be used in environments which require the image to be based only on RedHat Linux, or any of it's derivatives.
 
