@@ -1,0 +1,17 @@
+name: publish
+
+on: [push]
+
+jobs:
+  publish-docktool-image:
+    runs-on: alpine-3.15
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build the docktool Docker image
+      run: |
+        echo $CR_PAT | docker login ghcr.io -u ricardo5555 --password-stdin
+      env:
+        CR_PAT: ${{ secrets.CR_PAT }}
+        
