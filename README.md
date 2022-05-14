@@ -1,18 +1,15 @@
-# Docker Network-Multitool (Formerly `praqma/Network-MultiTool`)
+# Docktool (Forked from `praqma/Network-MultiTool`)
 
-A (**multi-arch**) multitool for container/network testing and troubleshooting. The main docker image is based on Alpine Linux. There is a Fedora variant to be used in environments which require the image to be based only on RedHat Linux, or any of it's derivatives.
+A (**multi-arch**) multitool for container/network testing and troubleshooting. The main docker image is based on Alpine Linux.
 
 The container image contains lots of tools, as well as a `nginx` web server, which listens on port `80` and `443` by default. The web server helps to run this container-image in a straight-forward way, so you can simply `exec` into the container and use various tools.
 
-## Note about name/org change:
-Earlier, I created and maintained this tool with [Henrik](https://github.com/hoeghh), as `praqma/network-multitool`. Praqma was bought by another company, and now the **"Praqma"** brand is being dismantled. This means the network-multitool's git and docker repositories must go. It was decided by the current representatives of the company to hand it over to me so I can continue maintaining it. So, apart from a small change in the repository name, nothing has changed. 
-
-The docker repository to pull this image is now: [https://hub.docker.com/r/wbitt/network-multitool](https://hub.docker.com/r/wbitt/network-multitool)
+The docker repository to pull this image is now: [https://hub.docker.com/r/ra55/docktool (https://hub.docker.com/r/ra55/docktool)
 
 Or:
 
 ```
-docker pull wbitt/network-multitool
+docker pull ra55/docktool
 ```
 
 
@@ -23,38 +20,13 @@ docker pull wbitt/network-multitool
 * linux/arm64
 
 ## Downloadable from Docker Hub: 
-* [https://hub.docker.com/r/wbitt/network-multitool](https://hub.docker.com/r/wbitt/network-multitool)  (An automated multi-arch build)
-
-## Variants / image tags:
-* **latest**, minimal, alpine-minimal ( The main/default **'minimal'** image - Alpine based )
-* extra, alpine-extra (Alpine based image - with **extra tools** )
-* openshift , openshift-minimal (openshift compatible - **minimal**) - Ports: **1180, 11443**
-* openshift-extra (openshift compatible with **extra tools**) - Ports: **1180, 11443**
-* fedora, fedora-minimal ( **'Minimal'** Fedora based image )
+* [https://hub.docker.com/r/ra55/docktool](https://hub.docker.com/r/ra55/docktool)  (An automated multi-arch build)
 
 
-### Important notes about openshift variant:
-Openshift is very strict about how a container image should run. So, the **openshift variant** of the multitool has the following limitations / changes:
-
-* Runs as non-root ; which means some tools (e.g. `traceroute`, `tcptraceroute`, etc, will not work)
-* Listens on ports `1180` and `11443` - **not** `80` and `443`
-* Some executable files are manually set as `setuid`, so those tools remain usable. Tools set with `setuid` are: 
-  * apk 
-  * arping
-  * busybox
-  * mii-tool
-  * tcpdump
-  * tcptraceroute
-  * traceroute
-  * tshark
-
-Remember, this *multitool* is purely a troubleshooting tool, and should be used as such. It is not designed to abuse openshift (or any system's) security, nor should it be used to do so.
- 
-
-## Tools included in "latest, minimal, alpine-minimal , openshift, openshift-minimal":
+## Tools included in "latest":
 * apk package manager
 * Nginx Web Server (port `80`, port `443`) - with customizable ports!
-* awk, cut, diff, find, grep, sed, vi editor, wc
+* awk, cut, diff, find, grep, sed, wc
 * curl, wget
 * dig, nslookup
 * ip, ifconfig, route
@@ -66,41 +38,9 @@ Remember, this *multitool* is purely a troubleshooting tool, and should be used 
 * tcpdump
 * jq
 * bash
+* openssh-client, nmap, rsync, netcat-openbsd, grep, tar, sed, lsof
 
-**Size:** 16 MB compressed, 38 MB uncompressed
-
-## Tools included in "extra, alpine-extra, openshift-extra":
-All tools from "minimal", plus:
-* iperf3
-* ethtool, mii-tool, route
-* nmap
-* ss
-* tshark
-* ssh client, lftp client, rsync, scp
-* netcat (nc), socat
-* ApacheBench (ab)
-* mysql & postgresql client
-* git
-
-**Size:** 64 MB compressed, 220 MB uncompressed
-
-
-## Tools included in "fedora, fedora-minimal":
-* YUM package manager
-* Nginx Web Server (port 80, port 443) - customizable ports!
-* wget, curl
-* dig, nslookup
-* ip, ifconfig, route, traceroute, tracepath, mtr
-* ping, arp, arping
-* ps, netstat
-* gzip, cpio, tar
-* telnet client
-* awk, cut, diff, find, grep, sed, vi editor, wc
-* jq
-* `/bin/sh` shell interpreter - not `/bin/bash`
-
-**Size:** 72 MB uncompressed
-
+**Size:** 56 MB compressed, 68 MB uncompressed
 
 **Note:** The SSL certificates are generated for "localhost", are self signed, and placed in `/certs/` directory. During your testing, ignore the certificate warning/error. While using curl, you can use `-k` to ignore SSL certificate warnings/errors.
 
@@ -111,7 +51,7 @@ All tools from "minimal", plus:
 
 ### Docker:
 ```
-$ docker run  -d wbitt/network-multitool
+$ docker run  -d ra55/docktool
 ```
 
 Then:
@@ -125,12 +65,12 @@ $ docker exec -it container-name /bin/bash
 
 Create single pod - without a deployment:
 ```
-$ kubectl run multitool --image=wbitt/network-multitool
+$ kubectl run docktool --image=ra55/docktool
 ```
 
 Create a deployment:
 ```
-$ kubectl create deployment multitool --image=wbitt/network-multitool
+$ kubectl create deployment docktool --image=ra55/docktool
 ```
 
 Then:
@@ -141,43 +81,24 @@ $ kubectl exec -it pod-name /bin/bash
 **Note:** You can pass additional parameter `--namespace=<your-desired-namespace>` to the above kubectl commands.
 
 
-### Openshift:
-
-```
-$ oc new-project test-project-1
-
-$ oc new-app wbitt/network-multitool:openshift --name multitool-openshift
-
-$ oc status
-
-$ oc get pods
-
-$ oc logs pod-name
-
-$ oc exec -it pod-name /bin/sh
-
-$ oc port-forward pod-name  1180:1180 11443:11443
-```
-
-
 ## How to use this image on **host network** ?
 
-Sometimes you want to do testing using the **host network**.  This can be achieved by running the multitool using host networking. 
+Sometimes you want to do testing using the **host network**.  This can be achieved by running the docktool using host networking. 
 
 
 ### Docker:
 ```
-$ docker run --network host -d wbitt/network-multitool
+$ docker run --network host -d ra55/docktool
 ```
 
-**Note:** If port 80 and/or 443 are already busy on the host, then use pass the extra arguments to multitool, so it can listen on a different port, as shown below:
+**Note:** If port 80 and/or 443 are already busy on the host, then use pass the extra arguments to docktool, so it can listen on a different port, as shown below:
 
 ```
-$ docker run --network host -e HTTP_PORT=1180 -e HTTPS_PORT=11443 -d wbitt/network-multitool
+$ docker run --network host -e HTTP_PORT=1180 -e HTTPS_PORT=11443 -d ra55/docktool
 ```
 
 ### Kubernetes:
-For Kubernetes, there is YAML/manifest file `multitool-daemonset.yaml` in the `kubernetes` directory, that will run an instance of the multitool on all hosts in the cluster using host networking.
+For Kubernetes, there is YAML/manifest file `multitool-daemonset.yaml` in the `kubernetes` directory, that will run an instance of the docktool on all hosts in the cluster using host networking.
 
 ```
 $ kubectl apply -f kubernetes/multitool-daemonset.yaml
@@ -185,11 +106,11 @@ $ kubectl apply -f kubernetes/multitool-daemonset.yaml
 
 **Notes:** 
 * You can pass additional parameter `--namespace=<your-desired-namespace>` to the above kubectl command.
-* Due to a possibility of something (some service) already listening on port 80 and 443 on the worker nodes, the `daemonset` is configured to run multitool on port `1180` and `11443`. You can change this in the YAML file if you want.
+* Due to a possibility of something (some service) already listening on port 80 and 443 on the worker nodes, the `daemonset` is configured to run docktool on port `1180` and `11443`. You can change this in the YAML file if you want.
 
 
 # Configurable HTTP and HTTPS ports:
-There are times when one may want to join this (multitool) container to another container's IP namespace for troubleshooting, or on the host network. This is true for both Docker and Kubernetes platforms. During that time if the container in question is a web server (nginx, apache, etc), or a reverse-proxy (traefik, nginx, haproxy, etc), then network-multitool cannot join it in the same IP namespace on Docker, and similarly it cannot join the same pod on Kubernetes. This happens because network multitool also runs a web server on port 80 (and 443), and this results in port conflict on the same IP address. To help in this sort of troubleshooting, there are two environment variables **HTTP_PORT** and **HTTPS_PORT** , which you can use to provide the values of your choice instead of 80 and 443. When the container starts, it uses the values provided by you/user to listen for incoming connections. Below is an example:
+There are times when one may want to join this (docktool) container to another container's IP namespace for troubleshooting, or on the host network. This is true for both Docker and Kubernetes platforms. During that time if the container in question is a web server (nginx, apache, etc), or a reverse-proxy (traefik, nginx, haproxy, etc), then network-multitool cannot join it in the same IP namespace on Docker, and similarly it cannot join the same pod on Kubernetes. This happens because network multitool also runs a web server on port 80 (and 443), and this results in port conflict on the same IP address. To help in this sort of troubleshooting, there are two environment variables **HTTP_PORT** and **HTTPS_PORT** , which you can use to provide the values of your choice instead of 80 and 443. When the container starts, it uses the values provided by you/user to listen for incoming connections. Below is an example:
 
 ```
 $ docker run -e HTTP_PORT=1180 -e HTTPS_PORT=11443 \
