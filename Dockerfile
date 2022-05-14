@@ -11,6 +11,7 @@ RUN     apk update \
                 iproute2 iputils jq mtr \
                 net-tools nginx openssl \
                 perl-net-telnet procps tcpdump tcptraceroute wget \
+                openssh-client nmap rsync netcat-openbsd grep tar sed lsof \
     &&  mkdir /certs /docker \
     &&  chmod 700 /certs \
     &&  openssl req \
