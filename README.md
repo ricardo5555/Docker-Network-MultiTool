@@ -1,11 +1,10 @@
-# Docktool (Forked from `praqma/Network-MultiTool`)
+# Docktool (Forked from `Network-MultiTool`)
 
 A (**multi-arch**) multitool for container/network testing and troubleshooting. The main docker image is based on Alpine Linux.
 
 The container image contains lots of tools, as well as a `nginx` web server, which listens on port `80` and `443` by default. The web server helps to run this container-image in a straight-forward way, so you can simply `exec` into the container and use various tools.
 
-The docker repository to pull this image is now: [https://hub.docker.com/r/ra55/docktool (https://hub.docker.com/r/ra55/docktool)
-
+The docker repository to pull this image is now: [https://hub.docker.com/r/ra55/docktool](https://hub.docker.com/r/ra55/docktool)
 Or:
 
 ```
@@ -125,11 +124,11 @@ CONTAINER ID        IMAGE                     COMMAND                  CREATED  
 
 
 $ curl http://localhost:1180
-Praqma Network MultiTool (with NGINX) - 4636efd4660c - 172.17.0.3/16 - HTTP: 1180 , HTTPS: 11443
+Network MultiTool (with NGINX) - 4636efd4660c - 172.17.0.3/16 - HTTP: 1180 , HTTPS: 11443
 
 
 $ curl -k https://localhost:11443
-Praqma Network MultiTool (with NGINX) - 4636efd4660c - 172.17.0.3/16 - HTTP: 1180 , HTTPS: 11443
+Network MultiTool (with NGINX) - 4636efd4660c - 172.17.0.3/16 - HTTP: 1180 , HTTPS: 11443
 ```  
 
 If these environment variables are absent/not-provided, the container will listen on normal/default ports 80 and 443.
